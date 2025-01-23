@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: "Hyphen NEW CRM Application"
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 60
+    Layers:
+      - !Ref AwsSdkLayer2
+
+Parameters:
+  StageName:
+    Type: String
+    Default: dev
+  
+Resources:
+  AwsSdkLayer2:
+    Type: "AWS::Serverless::LayerVersion"
+    Properties:
+      LayerName: AWS-SDK-Layer
+      Description: Latest AWS SDK for Lambda
+      ContentUri: ./nodejs.zip
+      CompatibleRuntimes:
+        - nodejs20.x
+      LicenseInfo: "Available under the MIT-0 license."
+      RetentionPolicy: Delete
+
+
+  TestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      MemorySize: 1028
+      Timeout: 900
+      Handler: test.main
+      CodeUri: test
